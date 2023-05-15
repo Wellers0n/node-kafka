@@ -1,0 +1,9 @@
+{
+  "name": "node-kafka",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:Wellers0n/node-kafka.git",
+  "author": "Wellerson <wllrsn.c@gmail.com>",
+  "license": "MIT",
+  "private": true
+}
