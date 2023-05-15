@@ -5,5 +5,8 @@
   "repository": "git@github.com:Wellers0n/node-kafka.git",
   "author": "Wellerson <wllrsn.c@gmail.com>",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "mongoose": "^7.1.1"
+  }
 }
