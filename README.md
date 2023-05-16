@@ -60,6 +60,3 @@ docker-compose down -v
 [Swagger](https://swagger.io/)<br/>
 [Docker-compose](https://docs.docker.com/compose/)<br/>
 [Yarn](https://yarnpkg.com/en/)<br/>
-[WorkSpaces](https://yarnpkg.com/lang/en/docs/workspaces/)<br/>
-[Styled-Components](https://www.styled-components.com/)<br/>
-[Material-IU](https://mui.com/)<br/>
