@@ -18,6 +18,6 @@
   "apis": [
     "./src/routes/health/*.ts",
     "./src/routes/session/*.ts",
-    "./src/routes/location/*.ts"
+    "./src/routes/publish/*.ts"
   ]
 }
