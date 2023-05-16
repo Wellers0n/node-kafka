@@ -4,12 +4,7 @@ const { SchemaType } = require("@kafkajs/confluent-schema-registry");
 type PublishLocationProps = {
   payload: {
     ip: string;
-    country: string;
-    latitude: string;
-    longitude: string;
     timestamp: number;
-    region: string;
-    city: string;
     clientId: string;
   };
 };

@@ -29,7 +29,11 @@ const locations = new Schema({
   city: {
     type: String,
     required: "city is requerid",
-  }
+  },
+  clientId: {
+    type: String,
+    require: "clientId is required",
+  },
 });
 
 export default mongoose.model("locations", locations);
