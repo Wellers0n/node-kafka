@@ -13,6 +13,7 @@
     "build:webpack": "NODE_ENV=production npm run clear && webpack --env production"
   },
   "dependencies": {
+    "@kafkajs/confluent-schema-registry": "^3.3.0",
     "axios": "^1.4.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
@@ -22,6 +23,7 @@
     "express-http-context": "^1.2.4",
     "express-promise-router": "^4.1.1",
     "jsonwebtoken": "^9.0.0",
+    "kafkajs": "^2.2.4",
     "moment": "^2.29.4",
     "mongoose": "^7.1.1",
     "swagger-jsdoc": "^6.2.8",
