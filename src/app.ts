@@ -7,6 +7,7 @@ import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
 
 import { routes } from "./routes";
+import locationConsumer from "./consumers/location";
 
 // @ts-ignore
 import swaggerJson from "../swagger.json";
@@ -14,7 +15,6 @@ import swaggerJson from "../swagger.json";
 const port = process.env.PORT || 3001;
 
 const app = express();
-
 
 import * as dotenv from "dotenv";
 import connectDatabase from "./database";
@@ -50,4 +50,9 @@ app.listen(port, async () => {
     console.log("Could not connect to database", { error });
     throw error;
   }
+  
+  locationConsumer().catch(e => console.error(`[location/consumer] ${e.message}`, e))
+
 });
+
+
