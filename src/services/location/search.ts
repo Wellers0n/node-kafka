@@ -1,6 +1,6 @@
 import Users from "../../models/users";
-import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
+import publishLocation from "../../publishers/location";
 
 type SearchProps = {
   ip: string;
@@ -16,20 +16,32 @@ const search = async ({ ip, timestamp, clientId }: SearchProps) => {
       },
     });
 
+    publishLocation({
+      payload: {
+        ip: data.ip,
+        country: data.country_name,
+        latitude: data.latitude,
+        longitude: data.longitude,
+        timestamp,
+        region: data.region_name,
+        city: data.city,
+        clientId: clientId,
+      },
+    })
+
     return {
       payload: {
         ip: data.ip,
         latitude: data.latitude,
         longitude: data.longitude,
-        country_name: data.country_name,
-        country_code: data.country_code,
-        region_name: data.region_name,
-        region_code: data.region_code,
+        country: data.country_name,
+        region: data.region_name,
         city: data.city,
       },
       message: "Successful search",
       status: 200,
     };
+    
   } catch (error) {
     return {
       payload: null,
