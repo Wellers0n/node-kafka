@@ -34,8 +34,16 @@ Use node `v18.12.1`
 
 At the root directory, run the following commands:
 
+start kafka and apache
+
 ```sh
 docker-compose up --build -d
+```
+
+and start server
+
+```sh
+yarn dev
 ```
 
 ## Listening in
