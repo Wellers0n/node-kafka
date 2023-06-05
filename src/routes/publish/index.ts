@@ -1,6 +1,5 @@
 import { Router } from "express";
-import LocationController from "../../controllers/publish";
-import authentication from "../../middleware/authentication";
+import publishLocationController from "../../controllers/publish/localtion";
 
 const publishRoutes = Router();
 
@@ -8,8 +7,6 @@ const publishRoutes = Router();
  * @swagger
  * /publish/:
  *   post:
- *     security: 
- *       - token: []
  *     description: publish
  *     tags: ["Publish"]
  *     responses:
@@ -82,6 +79,6 @@ const publishRoutes = Router();
  *                  type: string
  * 
  */
-publishRoutes.post("/", authentication, LocationController.Publish);
+publishRoutes.post("/", publishLocationController);
 
 export { publishRoutes };
