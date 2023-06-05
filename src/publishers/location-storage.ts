@@ -1,22 +1,30 @@
 import { Partitioners } from 'kafkajs'
 import kafkaConfig from '../config/kafka'
 
-type PublishLocationProps = {
+type PublishLocationStorageProps = {
   payload: {
     ip: string
-    timestamp: number
+    timestamp: number | string
     clientId: string
+    country: string
+    latitude: number | string
+    longitude: number | string
+    region: string
+    city: string
   }
 }
 
-const publishLocation = async ({ payload }: PublishLocationProps) => {
+const publishLocationStorage = async ({
+  payload
+}: PublishLocationStorageProps) => {
   const { kafka } = kafkaConfig()
 
-  const topic = 'location'
+  const topic = 'location-storage'
 
   const producer = kafka.producer({
     createPartitioner: Partitioners.DefaultPartitioner
   })
+
   await producer.connect()
 
   console.log(`publishing to ${topic}`, payload)
@@ -29,4 +37,4 @@ const publishLocation = async ({ payload }: PublishLocationProps) => {
   await producer.disconnect()
 }
 
-export default publishLocation
+export default publishLocationStorage
