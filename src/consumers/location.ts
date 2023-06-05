@@ -48,7 +48,6 @@ const locationConsumer = async () => {
       const is30MinLater = moment(timestamp).isBefore(timestampNow)
 
       if (is30MinLater || !userSession?.ip) {
-        console.log('if')
         const { data } = await axios.get(
           `${process.env.IPSTACK_URL}/${location.ip}`,
           {
@@ -74,7 +73,6 @@ const locationConsumer = async () => {
         publishLocationStorage({
           payload: update
         })
-
       } else {
         publishLocationStorage({
           payload: {

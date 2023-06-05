@@ -30,7 +30,7 @@ const locationStorageConsumer = async () => {
 
       if (!location) {
         await locationModel.create(locationStorage)
-      } 
+      }
 
       await locationModel.updateOne({ ip: locationStorage.ip }, locationStorage)
     }
