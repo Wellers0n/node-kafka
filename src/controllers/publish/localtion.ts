@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
-import PublishServices from "../../services/publish";
-import moment from "moment";
+import publishLocationServices from "../../services/publish/location";
 
-const Publish = async (request: Request, response: Response) => {
+const publishLocation = async (request: Request, response: Response) => {
   const { ip, timestamp, clientId } = request.body;
 
   if (!ip || !timestamp || !clientId) {
@@ -11,7 +10,7 @@ const Publish = async (request: Request, response: Response) => {
       .json({ message: "IP, timestamp and clientId is required" });
   }
 
-  const { message, payload, status } = await PublishServices.Publish({
+  const { message, payload, status } = await publishLocationServices({
     ip,
     timestamp,
     clientId,
@@ -22,4 +21,4 @@ const Publish = async (request: Request, response: Response) => {
     .json({ message, payload, clientId, timestamp });
 };
 
-export default Publish;
+export default publishLocation;

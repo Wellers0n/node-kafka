@@ -1,11 +1,11 @@
 import { Router } from 'express'
-import HealthController from '../../controllers/health'
+import healthVerifyController from '../../controllers/health/veriify'
 
 const healthRoutes = Router()
 
 /**
  * @swagger
- * /health/:
+ * /health/verify:
  *   get:
  *     description: health
  *     tags: ["Health"]
@@ -44,6 +44,6 @@ const healthRoutes = Router()
  *              example:
  *                message: Not authorized 🥷!
  */
-healthRoutes.get('/', HealthController)
+healthRoutes.get('/verify', healthVerifyController)
 
 export { healthRoutes }

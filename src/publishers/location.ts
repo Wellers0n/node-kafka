@@ -1,5 +1,4 @@
 import kafkaConfig from "../config/kafka";
-const { SchemaType } = require("@kafkajs/confluent-schema-registry");
 
 type PublishLocationProps = {
   payload: {
