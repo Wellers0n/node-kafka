@@ -1,91 +1,94 @@
-import moment from "moment";
-import kafkaConfig from "../config/kafka";
-import locationModel from "../models/location";
+import moment from 'moment'
+import kafkaConfig from '../config/kafka'
+import axios from 'axios'
+import redisDatabase from '../redis-database'
+import publishLocationStorage from '@/publishers/location-storage'
 
 type Payload = {
   message: {
-    value: string;
-  };
-};
+    value: string
+  }
+}
+
+type Data = {
+  ip: string
+  timestamp: number
+  clientId: string
+  country: string
+  latitude: number
+  longitude: number
+  region: string
+  city: string
+}
 
 const locationConsumer = async () => {
-  const { kafka } = kafkaConfig();
+  const { kafka } = kafkaConfig()
+
+  const { redisClient } = await redisDatabase()
 
   const consumer = kafka.consumer({
-    groupId: "location-group",
-  });
+    groupId: 'location-group'
+  })
 
-  await consumer.connect();
-  await consumer.subscribe({ topic: "location" });
+  await consumer.connect()
+  await consumer.subscribe({ topic: 'location' })
 
   await consumer.run({
     eachMessage: async ({ message }: Payload) => {
-      if (!message.value) return;
+      if (!message.value) return
 
-      const location = await JSON.parse(message.value);
+      const location = await JSON.parse(message.value)
 
-      // const currentLocation = await locationModel.findOne({
-      //   clientId: location.clientId,
-      //   ip: location.ip,
-      // });
+      const userSession = await redisClient.hGetAll(location.clientId)
 
-      const timestamp = moment.unix(location.timestamp).add(30, "minutes");
-      // .format("DD/MM/YYYY HH:mm:ss");
+      const timestamp = moment(location.timestamp * 1000).add(30, 'minutes')
 
-      const timestampNow = moment();
+      const timestampNow = moment()
 
-      console.log({ timestamp, timestampNow });
+      const is30MinLater = moment(timestamp).isBefore(timestampNow)
 
-      const is30MinLater = moment(timestampNow).isAfter(timestamp);
+      if (is30MinLater || !userSession?.ip) {
+        const { data } = await axios.get(
+          `${process.env.IPSTACK_URL}/${location.ip}`,
+          {
+            params: {
+              access_key: process.env.IPSTACK_ACCESS_KEY
+            }
+          }
+        )
 
-      console.log({ is30MinLater });
+        const update = {
+          ip: data.ip as string,
+          timestamp: location.timestamp as number,
+          clientId: location.clientId as string,
+          country: data.country_name as string,
+          latitude: data.latitude as number,
+          longitude: data.longitude as number,
+          region: data.region_name as string,
+          city: data.city as string
+        }
 
-      // console.log({ timestamp, timestampNow, is30MinLater, currentLocation });
+        await redisClient.hSet(location.clientId, update)
 
-      // if (is30MinLater || !currentLocation) {
-      //   const { data } = await axios.get(
-      //     `${process.env.IPSTACK_URL}/${location.ip}`,
-      //     {
-      //       params: {
-      //         access_key: process.env.IPSTACK_ACCESS_KEY,
-      //       },
-      //     }
-      //   );
+        publishLocationStorage({
+          payload: update
+        })
+      } else {
+        publishLocationStorage({
+          payload: {
+            ip: userSession.ip,
+            timestamp: userSession.timestamp,
+            clientId: userSession.clientId,
+            country: userSession.country,
+            latitude: userSession.latitude,
+            longitude: userSession.longitude,
+            region: userSession.region,
+            city: userSession.city
+          }
+        })
+      }
+    }
+  })
+}
 
-      //   console.log({ data });
-
-      //   const locationExist = await locationModel.findOne({
-      //     ip: location.ip,
-      //   });
-
-      //   if (!!locationExist) {
-      //     const update = {
-      //       ip: location.ip,
-      //       timestamp: location.timestamp,
-      //       clientId: location.clientId,
-      //       country: data.country_name,
-      //       latitude: data.latitude,
-      //       longitude: data.longitude,
-      //       region: data.region_name,
-      //       city: data.city,
-      //     };
-
-      //     return await locationExist.updateOne(update);
-      //   }
-
-      //   return await locationModel.create({
-      //     ip: location.ip,
-      //     timestamp: location.timestamp,
-      //     clientId: location.clientId,
-      //     country: data.country_name,
-      //     latitude: data.latitude,
-      //     longitude: data.longitude,
-      //     region: data.region_name,
-      //     city: data.city,
-      //   });
-      // }
-    },
-  });
-};
-
-export default locationConsumer;
+export default locationConsumer
