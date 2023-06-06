@@ -24,9 +24,7 @@ const publishLocation = async (request: Request, response: Response) => {
       clientId
     })
 
-    return response
-      .status(status)
-      .json({ message, payload, clientId, timestamp })
+    return response.status(status).json({ message, payload })
   } catch (error) {
     if (error instanceof ZodError) {
       return response.status(400).json({ message: error.errors[0].message })
