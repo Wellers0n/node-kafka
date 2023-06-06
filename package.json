@@ -31,7 +31,8 @@
     "redis": "^4.6.7",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^4.6.3",
-    "uuidv4": "^6.2.13"
+    "uuidv4": "^6.2.13",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
