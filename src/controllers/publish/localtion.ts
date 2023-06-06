@@ -1,24 +1,37 @@
-import { Request, Response } from "express";
-import publishLocationServices from "../../services/publish/location";
+import { Request, Response } from 'express'
+import publishLocationServices from '../../services/publish/location'
+import z, { ZodError } from 'zod'
 
 const publishLocation = async (request: Request, response: Response) => {
-  const { ip, timestamp, clientId } = request.body;
+  try {
+    const createLocationSchema = z.object({
+      ip: z.string({
+        required_error: 'Ip is required'
+      }),
+      clientId: z.string({
+        required_error: 'Email is required'
+      }),
+      timestamp: z.number({
+        required_error: 'Timestamp is required'
+      })
+    })
 
-  if (!ip || !timestamp || !clientId) {
+    const { ip, timestamp, clientId } = createLocationSchema.parse(request.body)
+
+    const { message, payload, status } = await publishLocationServices({
+      ip,
+      timestamp,
+      clientId
+    })
+
     return response
-      .status(400)
-      .json({ message: "IP, timestamp and clientId is required" });
+      .status(status)
+      .json({ message, payload, clientId, timestamp })
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return response.status(400).json({ message: error.errors[0].message })
+    }
   }
+}
 
-  const { message, payload, status } = await publishLocationServices({
-    ip,
-    timestamp,
-    clientId,
-  });
-
-  return response
-    .status(status)
-    .json({ message, payload, clientId, timestamp });
-};
-
-export default publishLocation;
+export default publishLocation
