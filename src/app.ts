@@ -7,19 +7,13 @@ import swaggerUi from 'swagger-ui-express'
 import swaggerJsdoc from 'swagger-jsdoc'
 
 import { routes } from './routes'
-// consumers
-import locationConsumer from './consumers/location'
-import locationStorageConsumer from './consumers/location-storage'
 
 // @ts-ignore
 import swaggerJson from '../swagger.json'
 
-const port = process.env.PORT || 3001
-
 const app = express()
 
 import * as dotenv from 'dotenv'
-import connectMongoDB from './mongodb-database'
 
 dotenv.config()
 
@@ -41,23 +35,4 @@ app.use(
   })
 )
 
-app.listen(port, async () => {
-  console.log(`We are live on ${port}`)
-  console.log(`Environment: ${process.env.ENVIRONMENT}`)
-
-  try {
-    await connectMongoDB()
-    console.log('Database connected with success!')
-  } catch (error) {
-    console.log('Could not connect to database', { error })
-    throw error
-  }
-
-  locationConsumer().catch(e =>
-    console.error(`[location/consumer] ${e.message}`, e)
-  )
-
-  locationStorageConsumer().catch(e =>
-    console.error(`[location/consumer] ${e.message}`, e)
-  )
-})
+export default app
