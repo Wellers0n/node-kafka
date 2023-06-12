@@ -13,7 +13,16 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsup src/server.ts",
     "clear": "rimraf ./dist",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "test": "ENVIRONMENT=test jest --detectOpenHandles"
+  },
+  "config": {
+    "mongodbMemoryServer": {
+      "arch": "x64",
+      "disablePostinstall": "1",
+      "version": "6.0.6",
+      "debug": "0"
+    }
   },
   "dependencies": {
     "axios": "^1.4.0",
@@ -27,6 +36,7 @@
     "jsonwebtoken": "^9.0.0",
     "kafkajs": "^2.2.4",
     "moment": "^2.29.4",
+    "mongodb-memory-server": "^8.13.0",
     "mongoose": "^7.1.1",
     "redis": "^4.6.7",
     "swagger-jsdoc": "^6.2.8",
@@ -53,6 +63,7 @@
     "prettier": "^2.8.8",
     "rimraf": "^5.0.0",
     "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.1",
     "tsup": "^6.7.0",
     "tsx": "^3.12.7",
     "typescript": "^5.1.3"
