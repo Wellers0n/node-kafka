@@ -1,6 +1,5 @@
-import moment from 'moment'
-import kafkaConfig from '../config/kafka'
-import locationModel from '../models/location'
+import kafkaConfig from '@/config/kafka'
+import locationModel from '@/models/location'
 
 type Payload = {
   message: {
@@ -34,6 +33,12 @@ const locationStorageConsumer = async () => {
 
       await locationModel.updateOne({ ip: locationStorage.ip }, locationStorage)
     }
+  })
+  
+  process.on('SIGTERM', async () => {
+    await consumer.disconnect()
+
+    process.exit(0)
   })
 }
 
