@@ -1,7 +1,7 @@
 import moment from 'moment'
-import kafkaConfig from '../config/kafka'
+import kafkaConfig from '@/config/kafka'
 import axios from 'axios'
-import redisDatabase from '../redis-database'
+import redisDatabase from '@/redis-database'
 import publishLocationStorage from '@/publishers/location-storage'
 
 type Payload = {
@@ -90,6 +90,12 @@ const locationConsumer = async () => {
         })
       }
     }
+  })
+
+  process.on('SIGTERM', async () => {
+    await consumer.disconnect()
+
+    process.exit(0)
   })
 }
 
