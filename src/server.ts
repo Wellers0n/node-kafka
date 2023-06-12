@@ -5,15 +5,15 @@ import locationConsumer from './consumers/location'
 import locationStorageConsumer from './consumers/location-storage'
 import connectMongoDB from './mongodb-database'
 
-const port = process.env.PORT || 3001
-const environment = process.env.ENVIRONMENT || 'development'
+const PORT = process.env.PORT || 3001
+const ENVIRONMENT = process.env.ENVIRONMENT || 'development'
 
-app.listen(port, async () => {
-  console.log(`We are live on ${port}`)
-  console.log(`Environment: ${environment}`)
+app.listen(PORT, async () => {
+  console.log(`We are live on ${PORT}`)
+  console.log(`Environment: ${ENVIRONMENT}`)
 
   try {
-    await connectMongoDB()
+    ENVIRONMENT !== 'test' && (await connectMongoDB())
     console.log('Database connected with success!')
   } catch (error) {
     console.log('Could not connect to database', { error })

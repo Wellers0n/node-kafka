@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 const uri = process.env.MONGO_URI || 'mongodb://localhost:27017/node-kafka'
 
-export default function connectDatabase() {
+export default async function connectDatabase() {
   return new Promise((resolve, reject) => {
     mongoose.Promise = global.Promise
     mongoose.connection
