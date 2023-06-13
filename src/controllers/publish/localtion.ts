@@ -9,7 +9,7 @@ const publishLocation = async (request: Request, response: Response) => {
         required_error: 'Ip is required'
       }),
       clientId: z.string({
-        required_error: 'Email is required'
+        required_error: 'clientId is required'
       }),
       timestamp: z.number({
         required_error: 'Timestamp is required'
